@@ -543,6 +543,8 @@ class BinaryFileViewer(QMainWindow):
         if selected.isValid():
             top_row = selected.parent().row() if selected.parent().isValid() else selected.row()
             insert_row = top_row + 1
+        else:
+            insert_row = self.tree.model().rowCount()
 
         self.tree.model().insertRow(insert_row, [self._build_tree_item(comm)])
         self.export_data()
