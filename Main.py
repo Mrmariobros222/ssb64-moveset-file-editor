@@ -576,6 +576,7 @@ class BinaryFileViewer(QMainWindow):
     # ── File I/O ──────────────────────────────────────────────────────
 
     def open_file(self):
+        keyboard.add_hotkey('alt+o', start, suppress=True, trigger_on_release=True)
         file_path, _ = QFileDialog.getOpenFileName(
             self, "Open Binary File", "", "Binary Files (*.bin);;All Files (*)")
         if file_path:
