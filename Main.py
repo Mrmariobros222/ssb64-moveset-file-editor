@@ -300,6 +300,7 @@ class BinaryFileViewer(QMainWindow):
 
         sp = QStyle.StandardPixmap
         add_button    = _sidebar_button("Add",    "Add command after selection",  sp.SP_FileDialogNewFolder)
+        clone_button  = _sidebar_button("Clone",  "Clone selected command",       sp.SP_FileDialogNewFolder)
         delete_button = _sidebar_button("Delete", "Delete selected command",      sp.SP_TrashIcon)
         move_up_btn   = _sidebar_button("Up",     "Move selected command up",     sp.SP_ArrowUp)
         move_dn_btn   = _sidebar_button("Down",   "Move selected command down",   sp.SP_ArrowDown)
@@ -312,6 +313,7 @@ class BinaryFileViewer(QMainWindow):
             submenu.addAction(act)
         add_button.setMenu(submenu)
 
+        clone_button.clicked.connect(self.clone_selected_command)
         delete_button.clicked.connect(self.delete_selected_command)
         move_up_btn.clicked.connect(self.move_command_up)
         move_dn_btn.clicked.connect(self.move_command_down)
@@ -536,6 +538,15 @@ class BinaryFileViewer(QMainWindow):
         self.tree.model().insertRow(insert_row, [self._build_tree_item(comm)])
         self.export_data()
 
+    def clone_selected_command(self):
+        selected = self.tree.selectionModel().currentIndex()
+        if selected.isValid():
+            top_row = selected.parent().row() if selected.parent().isValid() else selected.row()
+            insert_row = top_row + 1
+
+        self.tree.model().insertRow(insert_row, [self._build_tree_item(comm)])
+        self.export_data()
+
     def delete_selected_command(self):
         selected = self.tree.selectionModel().currentIndex()
         if not selected.isValid():
@@ -591,7 +602,7 @@ class BinaryFileViewer(QMainWindow):
         if file_path:
             hex_str = self._get_raw_hex()
             try:
-                with open(file_path, "w") as f:
+                with open(file_path, "wb") as f:
                     f.write(bytes.fromhex(hex_str))
             except ValueError as e:
                 QMessageBox.critical(self, "Save Error", f"Invalid hex data: {e}")
