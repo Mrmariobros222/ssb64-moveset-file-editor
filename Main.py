@@ -318,7 +318,7 @@ class BinaryFileViewer(QMainWindow):
         move_up_btn.clicked.connect(self.move_command_up)
         move_dn_btn.clicked.connect(self.move_command_down)
 
-        for btn in (add_button, delete_button, move_up_btn, move_dn_btn):
+        for btn in (add_button, clone_button, delete_button, move_up_btn, move_dn_btn):
             tool_layout.addWidget(btn)
 
         sep = QFrame()
