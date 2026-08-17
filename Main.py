@@ -541,9 +541,13 @@ class BinaryFileViewer(QMainWindow):
     def clone_selected_command(self):
         selected = self.tree.selectionModel().currentIndex()
         if selected.isValid():
-            row = selected.parent().row() if selected.parent().isValid() else selected.row()
-            self.tree.model().insertRow(row)
-            self.export_data()
+            top_row = selected.parent().row() if selected.parent().isValid() else selected.row()
+            insert_row = top_row + 1
+        else:
+            insert_row = self.tree.model().rowCount()
+
+        self.tree.model().insertRow(insert_row)
+        self.export_data()
 
     def delete_selected_command(self):
         selected = self.tree.selectionModel().currentIndex()
