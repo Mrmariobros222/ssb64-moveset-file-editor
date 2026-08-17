@@ -333,6 +333,9 @@ class BinaryFileViewer(QMainWindow):
         save_action = QAction("Save", self)
         save_action.triggered.connect(self.save_file)
         file_menu.addAction(save_action)
+        saveas_action = QAction("Save as", self)
+        saveas_action.triggered.connect(self.saveas_file)
+        file_menu.addAction(saveas_action)
 
         # ── Signal wiring ────────────────────────────────────────────
         self.binary_text.textChanged.connect(self.update_decoded_data)
@@ -576,7 +579,6 @@ class BinaryFileViewer(QMainWindow):
     # ── File I/O ──────────────────────────────────────────────────────
 
     def open_file(self):
-        keyboard.add_hotkey('alt+o', start, suppress=True, trigger_on_release=True)
         file_path, _ = QFileDialog.getOpenFileName(
             self, "Open Binary File", "", "Binary Files (*.bin);;All Files (*)")
         if file_path:
@@ -584,6 +586,17 @@ class BinaryFileViewer(QMainWindow):
                 self.binary_text.setPlainText(f.read().hex().upper())
 
     def save_file(self):
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "Save Binary File", "", "Binary Files (*.bin);;All Files (*)")
+        if file_path:
+            hex_str = self._get_raw_hex()
+            try:
+                with open(file_path, "wb") as f:
+                    f.write(bytes.fromhex(hex_str))
+            except ValueError as e:
+                QMessageBox.critical(self, "Save Error", f"Invalid hex data: {e}")
+
+    def saveas_file(self):
         file_path, _ = QFileDialog.getSaveFileName(
             self, "Save Binary File", "", "Binary Files (*.bin);;All Files (*)")
         if file_path:
