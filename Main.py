@@ -546,7 +546,7 @@ class BinaryFileViewer(QMainWindow):
         else:
             insert_row = self.tree.model().rowCount()
 
-        self.tree.model().insertRow(insert_row)
+        self.tree.model().insertRow(insert_row, [self._build_tree_item(comm)])
         self.export_data()
 
     def delete_selected_command(self):
