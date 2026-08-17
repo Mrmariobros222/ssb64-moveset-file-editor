@@ -539,6 +539,15 @@ class BinaryFileViewer(QMainWindow):
         self.export_data()
 
     def clone_selected_command(self):
+        action = self.sender()
+        comm_code, comm_class = action.data()
+        default_hex = comm_code + '0' * (comm_class.command_size - 2)
+        try:
+            comm = comm_class(default_hex)
+        except Exception:
+            traceback.print_exc()
+            return
+
         selected = self.tree.selectionModel().currentIndex()
         if selected.isValid():
             top_row = selected.parent().row() if selected.parent().isValid() else selected.row()
