@@ -333,7 +333,7 @@ class BinaryFileViewer(QMainWindow):
         save_action = QAction("Save", self)
         save_action.triggered.connect(self.save_file)
         file_menu.addAction(save_action)
-        saveas_action = QAction("Save as", self)
+        saveas_action = QAction("Save As...", self)
         saveas_action.triggered.connect(self.saveas_file)
         file_menu.addAction(saveas_action)
 
@@ -591,7 +591,7 @@ class BinaryFileViewer(QMainWindow):
         if file_path:
             hex_str = self._get_raw_hex()
             try:
-                with open(file_path, "wb") as f:
+                with open(file_path, "w") as f:
                     f.write(bytes.fromhex(hex_str))
             except ValueError as e:
                 QMessageBox.critical(self, "Save Error", f"Invalid hex data: {e}")
